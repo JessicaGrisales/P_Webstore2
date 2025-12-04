@@ -9,8 +9,10 @@ const app = express();
 app.use(express.json());
 
 const userRoute = require("./routes/User");
-app.use("/user", userRoute);
+const adminRoute = require("./routes/Admin");
 
+app.use("/user", userRoute);
+app.use("/admin", adminRoute);
 // Démarrage du serveur
 app.listen(8080, () => {
   console.log("Server running on port 8080");
