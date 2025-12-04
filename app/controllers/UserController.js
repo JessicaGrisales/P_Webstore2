@@ -27,5 +27,34 @@ module.exports = {
         "sha512" // Algorithme de hachage
       )
       .toString("hex");
+    // ------------------------------------------------------------------
+    // 4. L'INSERTION SÉCURISÉE DANS LA BASE DE DONNÉES DOIT ÊTRE ICI
+    // ------------------------------------------------------------------
+
+    const sql =
+      "INSERT INTO t_users (username, password_hash, password_salt, firstname, lastname) VALUES (?, ?, ?, ?, ?)";
+
+    // Quel est le tableau de valeurs (values) ?
+    const values = [
+      // Quels sont les 5 éléments à mettre ici, dans le bon ordre ?
+      // ...
+    ];
+
+    // Exécution de la requête
+    db.query(sql, values, (err, result) => {
+      if (err) {
+        // Erreur serveur (par exemple si le username existe déjà)
+        console.error("Erreur SQL lors de l'enregistrement :", err);
+        return res
+          .status(500)
+          .json({ error: "Échec de l’enregistrement de l’utilisateur." });
+      }
+
+      // Succès : Utilisateur créé (code 201 Created)
+      res.status(201).json({
+        message: "Utilisateur enregistré avec succès.",
+        userId: result.insertId,
+      });
+    });
   },
 };
