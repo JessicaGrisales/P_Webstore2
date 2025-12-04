@@ -4,6 +4,10 @@ require("dotenv").config();
 const express = require("express");
 
 const app = express();
+
+// Ceci permet de lire le JSON envoyé dans les requêtes POST (pour /register par exemple)
+app.use(express.json());
+
 const userRoute = require("./routes/User");
 app.use("/user", userRoute);
 
