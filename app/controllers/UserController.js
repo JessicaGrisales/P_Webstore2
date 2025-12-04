@@ -56,4 +56,50 @@ module.exports = {
       });
     });
   },
+  // La fonction LOGIN (que nous venons de coder ensemble)
+  login: (req, res) => {
+    // 1. Récupération des données du formulaire
+    const { username, password } = req.body;
+
+    // 2. Requête SQL SELECT pour trouver l'utilisateur et récupérer hash/salt/role
+    const sql =
+      "SELECT id, username, password_hash, password_salt, role FROM t_users WHERE username = ?";
+
+    db.query(sql, [username], (err, results) => {
+      if (err) {
+        console.error(
+          "Erreur SQL lors de la recherche de l'utilisateur :",
+          err
+        );
+        return res.status(500).json({ error: "Erreur serveur." });
+      }
+      if (results.length === 0) {
+        return res
+          .status(401)
+          .json({ error: "Nom d’utilisateur ou mot de passe incorrect." });
+      }
+
+      const user = results[0];
+      const { password_hash: storedHash, password_salt: storedSalt } = user;
+
+      // 3. Hachage du mot de passe fourni avec le sel stocké
+      const hashToVerify = crypto
+        .pbkdf2Sync(password, storedSalt, 1000, 64, "sha512")
+        .toString("hex");
+
+      // 4. Comparaison des hachages
+      if (hashToVerify !== storedHash) {
+        return res
+          .status(401)
+          .json({ error: "Nom d’utilisateur ou mot de passe incorrect." });
+      }
+
+      // 5. Succès de la connexion : Génération du JWT (Prochaine étape !)
+      // Nous allons remplacer cette ligne par la génération d'un jeton
+      res.json({
+        message: "Connexion réussie.",
+        user: { id: user.id, username: user.username, role: user.role },
+      });
+    });
+  },
 };
