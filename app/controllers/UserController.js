@@ -1,6 +1,10 @@
 // 1. Imports : Base de données et Module de sécurité natif
 const db = require("../db");
 const crypto = require("crypto");
+const jwt = require("jsonwebtoken");
+
+// Accès à la clé secrète, Accès au secret du .env
+const JWT_SECRET = process.env.JWT_SECRET;
 
 module.exports = {
   get: (req, res) => {
@@ -94,11 +98,28 @@ module.exports = {
           .json({ error: "Nom d’utilisateur ou mot de passe incorrect." });
       }
 
-      // 5. Succès de la connexion : Génération du JWT (Prochaine étape !)
-      // Nous allons remplacer cette ligne par la génération d'un jeton
+      // 5. Succès de la connexion : Génération du JWT
+      const token = jwt.sign(
+        {
+          id: user.id,
+          username: user.username,
+          role: user.role, // 👈 CRUCIAL pour la gestion des rôles
+        },
+        JWT_SECRET, // Utilisation de la clé secrète du .env
+        {
+          expiresIn: "1h", // Le jeton expirera dans 1 heure (à adapter)
+        }
+      );
+
+      // 6. Renvoyer le jeton au client
       res.json({
         message: "Connexion réussie.",
-        user: { id: user.id, username: user.username, role: user.role },
+        token: token,
+        user: {
+          id: user.id,
+          username: user.username,
+          role: user.role,
+        },
       });
     });
   },
