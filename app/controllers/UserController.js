@@ -123,4 +123,31 @@ module.exports = {
       });
     });
   },
+  getProfile: (req, res) => {
+    // On récupère l'ID de l'utilisateur qui est stocké DANS LE JETON
+    const userId = req.userData.id;
+
+    // Requête SQL sécurisée
+    const sql =
+      "SELECT id, username, firstname, lastname, role FROM t_users WHERE id = ?";
+
+    db.query(sql, [userId], (err, results) => {
+      if (err) {
+        console.error("Erreur SQL profile:", err);
+        return res
+          .status(500)
+          .json({ error: "Erreur lors de la récupération du profil." });
+      }
+
+      if (results.length === 0) {
+        return res.status(404).json({ error: "Utilisateur non trouvé." });
+      }
+
+      // On renvoie les infos
+      res.json({
+        message: "Voici vos informations de profil",
+        user: results[0],
+      });
+    });
+  },
 };

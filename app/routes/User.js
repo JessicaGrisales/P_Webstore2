@@ -1,3 +1,6 @@
+// 1. Importe le middleware (vérifie le chemin vers le dossier middleware)
+const { checkAuth } = require("../middleware/auth");
+
 const express = require("express");
 
 const router = express.Router();
@@ -13,5 +16,9 @@ router.post("/register", userController.register);
 router.post("/login", userController.login);
 // Route déjà existante
 router.get("/", controller.get);
+
+// 2. Ajoute la route de profil
+// On place checkAuth AVANT le contrôleur pour bloquer les gens non connectés
+router.get("/profile", checkAuth, userController.getProfile);
 
 module.exports = router;
