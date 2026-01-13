@@ -1,0 +1,126 @@
+<!--<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <title>WebStore - Test Front-end</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        max-width: 600px;
+        margin: 20px auto;
+        line-height: 1.6;
+      }
+      .box {
+        border: 1px solid #ccc;
+        padding: 15px;
+        margin-bottom: 20px;
+        border-radius: 8px;
+      }
+      input {
+        display: block;
+        margin: 10px 0;
+        width: 100%;
+        padding: 8px;
+      }
+      button {
+        background: #007bff;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        cursor: pointer;
+        border-radius: 4px;
+      }
+      #tokenDisplay {
+        word-break: break-all;
+        color: green;
+        font-size: 0.8em;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Mon WebStore Sécurisé 🔐</h1>
+
+    <div class="box">
+      <h3>1. Inscription (Register)</h3>
+      <input type="text" id="regUser" placeholder="Nom d'utilisateur" />
+      <input type="password" id="regPass" placeholder="Mot de passe" />
+      <input type="text" id="regFirst" placeholder="Prénom" />
+      <input type="text" id="regLast" placeholder="Nom" />
+      <button onclick="register()">Créer le compte</button>
+    </div>
+
+    <div class="box">
+      <h3>2. Connexion (Login)</h3>
+      <input type="text" id="logUser" placeholder="Nom d'utilisateur" />
+      <input type="password" id="logPass" placeholder="Mot de passe" />
+      <button onclick="login()">Se connecter</button>
+      <p id="tokenDisplay"></p>
+    </div>
+
+    <div class="box">
+      <h3>3. Mon Profil (JWT requis)</h3>
+      <button onclick="getProfile()">Afficher mes infos</button>
+      <pre id="profileResult"></pre>
+    </div>
+
+    <script>
+      const API_URL = "https://localhost";
+      let userToken = "";
+
+      // Fonction d'inscription
+      async function register() {
+        const body = {
+          username: document.getElementById("regUser").value,
+          password: document.getElementById("regPass").value,
+          firstname: document.getElementById("regFirst").value,
+          lastname: document.getElementById("regLast").value,
+        };
+        const res = await fetch(`${API_URL}/user/register`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body),
+        });
+        const data = await res.json();
+        alert(data.message || data.error);
+      }
+
+      // Fonction de connexion
+      async function login() {
+        const body = {
+          username: document.getElementById("logUser").value,
+          password: document.getElementById("logPass").value,
+        };
+        const res = await fetch(`${API_URL}/user/login`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body),
+        });
+        const data = await res.json();
+        if (data.token) {
+          userToken = data.token;
+          document.getElementById("tokenDisplay").innerText =
+            "JWT généré avec succès !";
+          console.log("Token:", userToken);
+        } else {
+          alert(data.error);
+        }
+      }
+
+      // Fonction profil protégé
+      async function getProfile() {
+        if (!userToken) return alert("Veuillez d'abord vous connecter !");
+
+        const res = await fetch(`${API_URL}/user/profile`, {
+          method: "GET",
+          headers: { Authorization: `Bearer ${userToken}` },
+        });
+        const data = await res.json();
+        document.getElementById("profileResult").innerText = JSON.stringify(
+          data,
+          null,
+          2
+        );
+      }
+    </script>
+  </body>
+</html>-->

@@ -1,13 +1,17 @@
 {
-  "name": "mon_application",
+  "name": "webstore-api",
   "version": "1.0.0",
-  "description": "Une application Node.js",
+  "description": "API sécurisée WebStore",
   "main": "server.js",
   "scripts": {
     "start": "nodemon server.js -L"
   },
   "dependencies": {
-    "express": "^4.19.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "helmet": "^7.1.0",
+    "jsonwebtoken": "^9.0.2",
     "mysql2": "^3.9.4",
     "nodemon": "^3.1.0"
   }

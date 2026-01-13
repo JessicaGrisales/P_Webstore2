@@ -8,14 +8,14 @@ const JWT_SECRET = process.env.JWT_SECRET;
 
 module.exports = {
   get: (req, res) => {
-    res.send("User: Sarah Test");
+    res.send("User: Sarah Test 55");
   },
 
   register: (req, res) => {
     // 1. Récupérer les données de l'utilisateur (ATTENTION : Nécessite un middleware comme express.json() dans server.js)
     const { username, password, firstname, lastname } = req.body;
 
-    // --- Sécurité : Hachage et Salage (avec Crypto) ---
+    // Sécurité : Hachage et Salage (avec Crypto)
     // 2. Créer un sel unique et sécurisé (salt)
     const salt = crypto.randomBytes(16).toString("hex");
 
@@ -30,7 +30,7 @@ module.exports = {
       )
       .toString("hex");
 
-    // --- Insertion dans la base de données (SQL pur) ---
+    // Insertion dans la base de données (SQL pur)
 
     const sql =
       "INSERT INTO t_users (username, password_hash, password_salt, firstname, lastname) VALUES (?, ?, ?, ?, ?)";
@@ -103,7 +103,7 @@ module.exports = {
         {
           id: user.id,
           username: user.username,
-          role: user.role, // 👈 CRUCIAL pour la gestion des rôles
+          role: user.role, // important our la gestion des rôles
         },
         JWT_SECRET, // Utilisation de la clé secrète du .env
         {
